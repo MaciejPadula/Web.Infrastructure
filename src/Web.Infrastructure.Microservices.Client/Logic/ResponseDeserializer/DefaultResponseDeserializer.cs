@@ -12,9 +12,7 @@ namespace Web.Infrastructure.Microservices.Client.Logic.ResponseDeserializer
                 return null;
             }
 
-            var deserializedResponse = JsonConvert.DeserializeObject(response, targetMethod.ReturnType);
-
-            return deserializedResponse;
+            return JsonConvert.DeserializeObject(response, targetMethod.ReturnType);
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Web.Infrastructure.Microservices.Client.Builders;
+using Web.Infrastructure.Microservices.Client.Factories;
 using Web.Infrastructure.Microservices.Client.HttpMessageProvider;
 using Web.Infrastructure.Microservices.Client.Logic.HttpMessageProvider;
+using Web.Infrastructure.Microservices.Client.Logic.MethodEndpointProvider;
 using Web.Infrastructure.Microservices.Client.Logic.MethodTypeResolver;
 using Web.Infrastructure.Microservices.Client.Logic.MicroserviceCaller;
 using Web.Infrastructure.Microservices.Client.Logic.ResponseDeserializer;
@@ -31,13 +33,7 @@ namespace Web.Infrastructure.Microservices.Client.Extensions
 
             services.AddScoped(s =>
             {
-                var caller = new HttpMicroserviceCaller(
-                    new DefaultMethodTypeResolver(methodBuilder.Build()),
-                    s.GetRequiredService<IHttpMessageProvider>(),
-                    s.GetRequiredService<IResponseDeserializer>(),
-                    s.GetRequiredService<HttpClient>(),
-                    s.GetRequiredService<IServiceLookup>().Lookup(serviceName)
-                );
+                var caller = MicroserviceCallerFactory.CreateHttp(s, methodBuilder, serviceName);
 
                 return MicroserviceClient<TService>.Create(caller);
             });
