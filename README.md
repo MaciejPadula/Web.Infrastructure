@@ -19,7 +19,7 @@ public interface IUsersService
 ```C#
 namespace Server;
 
-public class UsersController : IUsersService
+public class UsersController : BaseController, IUsersService
 {
     private readonly List<string> _users;
 
@@ -65,7 +65,53 @@ You don't have to register endpoints. You can simply use this code:
 ```C#
 services.AddMicroserviceClient<IUsersService>("http://localhost:5000");
 ```
-but you have to be sure that all endpoints of your service are HttpPost.
+but you have to be sure that all endpoints of your service are HttpPost. After this operaction you can get interface from ServiceProvider or use it with DependencyInjection:
+<br/>
+`Directly from ServiceProvider:`
+
+```C#
+using Microsoft.Extensions.DependencyInjection;
+using ServerTest.Contract;
+using Web.Infrastructure.Microservices.Client.Exceptions;
+using Web.Infrastructure.Microservices.Client.Extensions;
+
+var services = new ServiceCollection();
+
+services.AddMicroserviceClient<IUsersService>("http://localhost:5000", 
+    builder => 
+        builder.AddRequestMethodType("Register", HttpMethod.Post)
+        builder.AddRequestMethodType("GetUsers", HttpMethod.Get)
+);
+
+var provider = services.BuildServiceProvider();
+
+var userService = provider.GetRequiredService<IUsersService>();
+
+var users = userService.GetUsers(); // will call your api and return synchronous data
+```
+
+`Dependency Injection:`
+
+```C#
+namespace Client;
+
+public class SomeController : BaseController
+{
+    private readonly IUsersService _userService
+
+    public SomeController(IUsersService userService)
+    {
+        _userService = userService;
+    }
+
+    [HttpGet("GetUsersFromService")]
+    public IActionResult GetUsersFromService()
+    {
+        var users = _userService.GetUsers();
+        return Ok(users);
+    }
+}
+```
 #
 ## IServiceLookup interface
 If you want to avoid puting addresses of your microservices in configuration file you can reimplement `IServiceLookup` interface and inject it as Scoped before adding microservice client:
@@ -83,5 +129,4 @@ namespace Web.Infrastructure.Microservices.Client.Logic.ServiceLookup
         Uri Lookup(string serviceName);
     }
 }
-
 ```
