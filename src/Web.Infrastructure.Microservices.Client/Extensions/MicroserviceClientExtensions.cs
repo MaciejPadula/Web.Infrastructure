@@ -27,6 +27,7 @@ namespace Web.Infrastructure.Microservices.Client.Extensions
             builder.Invoke(methodBuilder);
 
             services.TryAddTransient<HttpClient>();
+            services.TryAddTransient<IMethodEndpointProvider, DefaultMethodEndpointProvider>();
             services.TryAddTransient<IHttpMessageProvider, DefaultHttpMessageProvider>();
             services.TryAddTransient<IServiceLookup, DefaultServiceLookup>();
             services.TryAddTransient<IResponseDeserializer, DefaultResponseDeserializer>();
