@@ -29,7 +29,7 @@ namespace Web.Infrastructure.Microservices.Client.Extensions
             services.TryAddTransient<HttpClient>();
             services.TryAddTransient<IMethodEndpointProvider, DefaultMethodEndpointProvider>();
             services.TryAddTransient<IHttpMessageProvider, DefaultHttpMessageProvider>();
-            services.TryAddTransient<IServiceLookup, DefaultServiceLookup>();
+            services.TryAddScoped<IServiceLookup, DefaultServiceLookup>();
             services.TryAddTransient<IResponseDeserializer, DefaultResponseDeserializer>();
 
             services.AddScoped(s =>
