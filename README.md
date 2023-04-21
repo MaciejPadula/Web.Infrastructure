@@ -114,7 +114,7 @@ public class SomeController : BaseController
 ```
 #
 ## IServiceLookup interface
-If you want to avoid puting addresses of your microservices in configuration file you can reimplement `IServiceLookup` interface and inject it as Scoped before adding microservice client:
+If you want to resolve services addresses automaticly you can create your own implementation of `IServiceLookup` interface and inject it as Scoped before adding microservice client:
 ```C#
 services.AddScoped<IServiceLookup, YourServiceLookup>();
 services.AddMicroserviceClient<IUsersService>("some_microservice_name_that_your_implementation_can_recognize");
