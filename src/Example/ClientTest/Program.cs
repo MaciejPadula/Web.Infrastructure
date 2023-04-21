@@ -1,29 +1,31 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using ServerTest.Contract;
+using ServerTest.Contract.Interfaces;
 using Web.Infrastructure.Microservices.Client.Exceptions;
 using Web.Infrastructure.Microservices.Client.Extensions;
 
 var services = new ServiceCollection();
 
-services.AddMicroserviceClient<IWeatherForecastService>("localhost:5000", 
-    builder => 
-        builder.AddRequestMethodType("Get", HttpMethod.Get)
-);
+services.AddMicroserviceClient<IUserService>("localhost:5051");
 
 var provider = services.BuildServiceProvider();
 
-var weatherForecastService = provider.GetRequiredService<IWeatherForecastService>();
+var userService = provider.GetRequiredService<IUserService>();
 
 try
 {
-    var value = weatherForecastService.Get();
+    userService.AddUser(new() { UserName = "Maciej" });
+    userService.AddUser(new() { UserName = "Test" });
 
-    foreach (var v in value.Forecasts)
+    var value = userService.GetUsers();
+
+    foreach (var u in value.Users)
     {
-        Console.WriteLine(v.Summary);
+        Console.WriteLine(u.Name);
     }
+
+    Console.ReadLine();
 }
-catch(MicroserviceResponseException ex)
+catch (MicroserviceResponseException ex)
 {
     Console.WriteLine(ex.Message);
     Console.WriteLine((int)ex.StatusCode);

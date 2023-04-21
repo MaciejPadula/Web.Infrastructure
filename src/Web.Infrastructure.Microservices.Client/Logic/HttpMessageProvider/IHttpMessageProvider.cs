@@ -2,6 +2,6 @@
 {
     public interface IHttpMessageProvider
     {
-        HttpRequestMessage Provide(Uri baseUrl, string endpoint, HttpMethod method);
+        HttpRequestMessage Provide(Uri baseUrl, string endpoint, object?[]? args, HttpMethod method);
     }
 }

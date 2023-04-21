@@ -27,13 +27,14 @@ namespace Web.Infrastructure.Microservices.Client.Logic.MicroserviceCaller
             _baseUrl = baseUrl;
         }
 
-        public object? Call(MethodInfo method)
+        public object? Call(MethodInfo method, object?[]? args)
         {
             var endpoint = _methodEndpointProvider.Provide(method);
 
             var message = _httpMessageProvider.Provide(
                 _baseUrl,
                 endpoint,
+                args,
                 _methodTypeResolver.Resolve(method.Name)
             );
 

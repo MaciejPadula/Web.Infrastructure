@@ -14,7 +14,7 @@ namespace Web.Infrastructure.Microservices.Client
                 throw new ArgumentNullException(nameof(targetMethod));
             }
 
-            return _microserviceCaller?.Call(targetMethod);
+            return _microserviceCaller?.Call(targetMethod, args);
         }
 
         public static T Create(IMicroserviceCaller microserviceCaller)
