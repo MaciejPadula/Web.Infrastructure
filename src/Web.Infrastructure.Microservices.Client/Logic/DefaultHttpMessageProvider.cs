@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System.Text;
-using Web.Infrastructure.Microservices.Client.Logic.HttpMessageProvider;
+using Web.Infrastructure.Microservices.Client.Interfaces;
 
-namespace Web.Infrastructure.Microservices.Client.HttpMessageProvider
+namespace Web.Infrastructure.Microservices.Client.Logic
 {
     internal class DefaultHttpMessageProvider : IHttpMessageProvider
     {

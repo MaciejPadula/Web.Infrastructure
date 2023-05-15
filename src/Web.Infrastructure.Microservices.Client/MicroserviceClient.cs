@@ -1,41 +1,38 @@
-﻿using System.Reflection;
-using Web.Infrastructure.Microservices.Client.Logic.MicroserviceCaller;
+﻿using Castle.DynamicProxy;
+using Web.Infrastructure.Microservices.Client.Interfaces;
 
-namespace Web.Infrastructure.Microservices.Client
+namespace Web.Infrastructure.Microservices.Client;
+
+public class MicroserviceClient : AsyncInterceptorBase
 {
-    internal class MicroserviceClient<T> : DispatchProxy
+    private readonly IMicroserviceCaller _microserviceCaller;
+    private readonly IIncomingMethodValidator _incomingMethodValidator;
+
+    internal MicroserviceClient(IMicroserviceCaller microserviceCaller, IIncomingMethodValidator incomingMethodValidator)
     {
-        private IMicroserviceCaller? _microserviceCaller;
+        _microserviceCaller = microserviceCaller;
+        _incomingMethodValidator = incomingMethodValidator;
+    }
 
-        protected override object? Invoke(MethodInfo? targetMethod, object?[]? args)
+    protected override Task InterceptAsync(IInvocation invocation, IInvocationProceedInfo proceedInfo, Func<IInvocation, IInvocationProceedInfo, Task> proceed)
+    {
+        return InterceptAsync<Task>(invocation, proceedInfo, default!);
+    }
+
+    protected override async Task<TResult> InterceptAsync<TResult>(IInvocation invocation, IInvocationProceedInfo proceedInfo, Func<IInvocation, IInvocationProceedInfo, Task<TResult>> proceed)
+    {
+        var targetMethod = invocation.Method;
+
+        if (!_incomingMethodValidator.Validate(targetMethod, out var ex))
         {
-            if (targetMethod == null)
-            {
-                throw new ArgumentNullException(nameof(targetMethod));
-            }
-
-            return _microserviceCaller?.Call(targetMethod, args);
+            throw ex;
         }
 
-        public static T Create(IMicroserviceCaller microserviceCaller)
-        {
-            object? proxy = Create<T, MicroserviceClient<T>>();
+        var result = await _microserviceCaller.Call<TResult>(
+            targetMethod.Name, 
+            targetMethod.DeclaringType?.Name ?? string.Empty, 
+            invocation.Arguments);
 
-            var clientProxy = (MicroserviceClient<T>?)proxy;
-            var outputProxy = (T?)proxy;
-
-            if (clientProxy == null || outputProxy == null)
-            {
-                throw new Exception();
-            }
-
-            clientProxy.LoadProperties(microserviceCaller);
-            return outputProxy;
-        }
-
-        private void LoadProperties(IMicroserviceCaller microserviceCaller)
-        {
-            _microserviceCaller = microserviceCaller;
-        }
+        return result ?? default!;
     }
 }

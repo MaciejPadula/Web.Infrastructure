@@ -1,14 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Castle.DynamicProxy;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Web.Infrastructure.Microservices.Client.Builders;
 using Web.Infrastructure.Microservices.Client.Factories;
-using Web.Infrastructure.Microservices.Client.HttpMessageProvider;
-using Web.Infrastructure.Microservices.Client.Logic.HttpMessageProvider;
-using Web.Infrastructure.Microservices.Client.Logic.MethodEndpointProvider;
-using Web.Infrastructure.Microservices.Client.Logic.MethodTypeResolver;
-using Web.Infrastructure.Microservices.Client.Logic.MicroserviceCaller;
-using Web.Infrastructure.Microservices.Client.Logic.ResponseDeserializer;
-using Web.Infrastructure.Microservices.Client.Logic.ServiceLookup;
+using Web.Infrastructure.Microservices.Client.Interfaces;
+using Web.Infrastructure.Microservices.Client.Logic;
 
 namespace Web.Infrastructure.Microservices.Client.Extensions
 {
@@ -31,15 +27,23 @@ namespace Web.Infrastructure.Microservices.Client.Extensions
             services.TryAddTransient<IHttpMessageProvider, DefaultHttpMessageProvider>();
             services.TryAddScoped<IServiceLookup, DefaultServiceLookup>();
             services.TryAddTransient<IResponseDeserializer, DefaultResponseDeserializer>();
+            services.TryAddTransient<IIncomingMethodValidator, DefaultIncomingMethodValidator>();
 
+            services.AddCastleCoreClient<TService>(s => MicroserviceCallerFactory.CreateHttp(s, methodBuilder, serviceName));
+
+            return services;
+        }
+
+        private static IServiceCollection AddCastleCoreClient<TService>(this IServiceCollection services, Func<IServiceProvider, IMicroserviceCaller> options)
+            where TService : class
+        {
             services.AddScoped(s =>
             {
-                var caller = MicroserviceCallerFactory.CreateHttp(s, methodBuilder, serviceName);
+                var generator = new ProxyGenerator();
+                var interceptor = new MicroserviceClient(options.Invoke(s), s.GetRequiredService<IIncomingMethodValidator>());
 
-                return MicroserviceClient<TService>.Create(caller);
+                return generator.CreateInterfaceProxyWithoutTarget<TService>(interceptor.ToInterceptor());
             });
-
-
 
             return services;
         }

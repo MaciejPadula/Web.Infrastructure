@@ -1,4 +1,4 @@
-﻿namespace Web.Infrastructure.Microservices.Client.Logic.HttpMessageProvider
+﻿namespace Web.Infrastructure.Microservices.Client.Interfaces
 {
     public interface IHttpMessageProvider
     {

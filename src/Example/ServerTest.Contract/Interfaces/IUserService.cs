@@ -5,7 +5,7 @@ namespace ServerTest.Contract.Interfaces
 {
     public interface IUserService
     {
-        void AddUser(AddUserRequest request);
-        GetUsersResponse GetUsers();
+        Task AddUser(AddUserRequest request);
+        Task<GetUsersResponse> GetUsers();
     }
 }
