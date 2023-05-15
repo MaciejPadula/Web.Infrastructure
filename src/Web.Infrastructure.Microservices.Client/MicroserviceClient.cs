@@ -1,54 +1,36 @@
-﻿using System.Reflection;
+﻿using Castle.DynamicProxy;
 using Web.Infrastructure.Microservices.Client.Logic.IncomingMethodValidator;
 using Web.Infrastructure.Microservices.Client.Logic.MicroserviceCaller;
 
-namespace Web.Infrastructure.Microservices.Client
+namespace Web.Infrastructure.Microservices.Client;
+
+public class MicroserviceClient : AsyncInterceptorBase
 {
-    internal class MicroserviceClient<T> : DispatchProxy
+    private readonly IMicroserviceCaller _microserviceCaller;
+    private readonly IIncomingMethodValidator _incomingMethodValidator;
+
+    public MicroserviceClient(IMicroserviceCaller microserviceCaller, IIncomingMethodValidator incomingMethodValidator)
     {
-        private IMicroserviceCaller? _microserviceCaller;
-        private IIncomingMethodValidator? _incomingMethodValidator;
+        _microserviceCaller = microserviceCaller;
+        _incomingMethodValidator = incomingMethodValidator;
+    }
 
-        protected override object? Invoke(MethodInfo? targetMethod, object?[]? args)
+    protected override Task InterceptAsync(IInvocation invocation, IInvocationProceedInfo proceedInfo, Func<IInvocation, IInvocationProceedInfo, Task> proceed)
+    {
+        return InterceptAsync<Task>(invocation, proceedInfo, default!);
+    }
+
+    protected override async Task<TResult> InterceptAsync<TResult>(IInvocation invocation, IInvocationProceedInfo proceedInfo, Func<IInvocation, IInvocationProceedInfo, Task<TResult>> proceed)
+    {
+        var targetMethod = invocation.Method;
+
+        if (!_incomingMethodValidator.Validate(targetMethod, out var ex))
         {
-            if (_microserviceCaller == null || _incomingMethodValidator == null || targetMethod == null || targetMethod.DeclaringType == null)
-            {
-                return null;
-            }
-
-            if (!_incomingMethodValidator.Validate(targetMethod, out var ex))
-            {
-                throw ex;
-            }
-
-            var genericArguments = targetMethod.ReturnType.GenericTypeArguments.ToList();
-
-            var type = genericArguments.Count == 0 ? typeof(void) : genericArguments[0];
-
-            var data = _microserviceCaller.Call(targetMethod.Name, targetMethod.DeclaringType.Name, args, type);
-            return data;
+            throw ex;
         }
 
-        public static T Create(IMicroserviceCaller microserviceCaller, IIncomingMethodValidator incomingMethodValidator)
-        {
-            object? proxy = Create<T, MicroserviceClient<T>>();
+        var result = await _microserviceCaller.Call<TResult>(targetMethod.Name, targetMethod.DeclaringType?.Name, invocation.Arguments);
 
-            var clientProxy = (MicroserviceClient<T>?)proxy;
-            var outputProxy = (T?)proxy;
-
-            if (clientProxy == null || outputProxy == null)
-            {
-                throw new Exception();
-            }
-
-            clientProxy.LoadProperties(microserviceCaller, incomingMethodValidator);
-            return outputProxy;
-        }
-
-        private void LoadProperties(IMicroserviceCaller microserviceCaller, IIncomingMethodValidator incomingMethodValidator)
-        {
-            _microserviceCaller = microserviceCaller;
-            _incomingMethodValidator = incomingMethodValidator;
-        }
+        return result ?? default!;
     }
 }

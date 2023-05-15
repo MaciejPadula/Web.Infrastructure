@@ -39,21 +39,13 @@ namespace Web.Infrastructure.Microservices.Client.Extensions
             return services;
         }
 
-        private static IServiceCollection AddReflectionsClient<TService>(this IServiceCollection services, Func<IServiceProvider, IMicroserviceCaller> options)
-            where TService : class
-        {
-            services.AddScoped(s => MicroserviceClient<TService>.Create(options.Invoke(s), s.GetRequiredService<IIncomingMethodValidator>()));
-
-            return services;
-        }
-
         private static IServiceCollection AddCastleCoreClient<TService>(this IServiceCollection services, Func<IServiceProvider, IMicroserviceCaller> options)
             where TService : class
         {
             services.AddScoped(s =>
             {
                 var generator = new ProxyGenerator();
-                var interceptor = new CastleCoreMicroserviceClient(options.Invoke(s), s.GetRequiredService<IIncomingMethodValidator>());
+                var interceptor = new MicroserviceClient(options.Invoke(s), s.GetRequiredService<IIncomingMethodValidator>());
 
                 return generator.CreateInterfaceProxyWithoutTarget<TService>(interceptor.ToInterceptor());
             });

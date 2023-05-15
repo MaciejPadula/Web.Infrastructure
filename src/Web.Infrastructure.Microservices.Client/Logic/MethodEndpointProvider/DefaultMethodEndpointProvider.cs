@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace Web.Infrastructure.Microservices.Client.Logic.MethodEndpointProvider
+﻿namespace Web.Infrastructure.Microservices.Client.Logic.MethodEndpointProvider
 {
     internal class DefaultMethodEndpointProvider : IMethodEndpointProvider
     {
