@@ -1,6 +1,4 @@
-﻿using System.Net;
-using System.Reflection;
-using Web.Infrastructure.Microservices.Client.Exceptions;
+﻿using Web.Infrastructure.Microservices.Client.Exceptions;
 using Web.Infrastructure.Microservices.Client.Logic.HttpMessageProvider;
 using Web.Infrastructure.Microservices.Client.Logic.MethodEndpointProvider;
 using Web.Infrastructure.Microservices.Client.Logic.MethodTypeResolver;
@@ -27,25 +25,30 @@ namespace Web.Infrastructure.Microservices.Client.Logic.MicroserviceCaller
             _baseUrl = baseUrl;
         }
 
-        public object? Call(MethodInfo method, object?[]? args)
+        public async Task<TResult?> Call<TResult>(string methodName, string controllerName, object?[]? args)
         {
-            var endpoint = _methodEndpointProvider.Provide(method);
+            return (TResult?)await Call(methodName, controllerName, args, typeof(TResult));
+        }
+
+        public async Task<object?> Call(string methodName, string controllerName, object?[]? args, Type type)
+        {
+            var endpoint = _methodEndpointProvider.Provide(methodName, controllerName);
 
             var message = _httpMessageProvider.Provide(
                 _baseUrl,
                 endpoint,
                 args,
-                _methodTypeResolver.Resolve(method.Name)
+                _methodTypeResolver.Resolve(methodName)
             );
 
-            var response = _httpClient?.Send(message);
+            var response = await _httpClient.SendAsync(message);
 
             if (!(response?.IsSuccessStatusCode ?? false))
             {
                 throw new MicroserviceResponseException(response);
             }
 
-            return _responseDeserializer.Deserialize(response?.Content?.ReadAsStringAsync().Result ?? "null", method);
+            return _responseDeserializer.Deserialize(response?.Content?.ReadAsStringAsync().Result ?? "null", type);
         }
     }
 }

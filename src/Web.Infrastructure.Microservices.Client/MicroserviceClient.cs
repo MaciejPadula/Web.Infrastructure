@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Web.Infrastructure.Microservices.Client.Logic.IncomingMethodValidator;
 using Web.Infrastructure.Microservices.Client.Logic.MicroserviceCaller;
 
 namespace Web.Infrastructure.Microservices.Client
@@ -6,18 +7,29 @@ namespace Web.Infrastructure.Microservices.Client
     internal class MicroserviceClient<T> : DispatchProxy
     {
         private IMicroserviceCaller? _microserviceCaller;
+        private IIncomingMethodValidator? _incomingMethodValidator;
 
         protected override object? Invoke(MethodInfo? targetMethod, object?[]? args)
         {
-            if (targetMethod == null)
+            if (_microserviceCaller == null || _incomingMethodValidator == null || targetMethod == null || targetMethod.DeclaringType == null)
             {
-                throw new ArgumentNullException(nameof(targetMethod));
+                return null;
             }
 
-            return _microserviceCaller?.Call(targetMethod, args);
+            if (!_incomingMethodValidator.Validate(targetMethod, out var ex))
+            {
+                throw ex;
+            }
+
+            var genericArguments = targetMethod.ReturnType.GenericTypeArguments.ToList();
+
+            var type = genericArguments.Count == 0 ? typeof(void) : genericArguments[0];
+
+            var data = _microserviceCaller.Call(targetMethod.Name, targetMethod.DeclaringType.Name, args, type);
+            return data;
         }
 
-        public static T Create(IMicroserviceCaller microserviceCaller)
+        public static T Create(IMicroserviceCaller microserviceCaller, IIncomingMethodValidator incomingMethodValidator)
         {
             object? proxy = Create<T, MicroserviceClient<T>>();
 
@@ -29,13 +41,14 @@ namespace Web.Infrastructure.Microservices.Client
                 throw new Exception();
             }
 
-            clientProxy.LoadProperties(microserviceCaller);
+            clientProxy.LoadProperties(microserviceCaller, incomingMethodValidator);
             return outputProxy;
         }
 
-        private void LoadProperties(IMicroserviceCaller microserviceCaller)
+        private void LoadProperties(IMicroserviceCaller microserviceCaller, IIncomingMethodValidator incomingMethodValidator)
         {
             _microserviceCaller = microserviceCaller;
+            _incomingMethodValidator = incomingMethodValidator;
         }
     }
 }

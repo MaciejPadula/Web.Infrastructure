@@ -1,9 +1,8 @@
-﻿using System.Reflection;
-
-namespace Web.Infrastructure.Microservices.Client.Logic.ResponseDeserializer
+﻿namespace Web.Infrastructure.Microservices.Client.Logic.ResponseDeserializer
 {
     public interface IResponseDeserializer
     {
-        object? Deserialize(string response, MethodInfo targetMethod);
+        object? Deserialize(string response, Type returnType);
+        T? Deserialize<T>(string response);
     }
 }

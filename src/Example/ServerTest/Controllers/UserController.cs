@@ -18,18 +18,19 @@ namespace ServerTest.Controllers
         }
 
         [HttpPost("AddUser")]
-        public void AddUser(AddUserRequest request)
+        public Task AddUser(AddUserRequest request)
         {
             _userRepository.Add(request.UserName);
+            return Task.CompletedTask;
         }
 
-        [HttpPost("GetUsers")]
-        public GetUsersResponse GetUsers()
+        [HttpGet("GetUsers")]
+        public Task<GetUsersResponse> GetUsers()
         {
-            return new GetUsersResponse
+            return Task.FromResult(new GetUsersResponse
             {
                 Users = _userRepository.Get()
-            };
+            });
         }
     }
 }

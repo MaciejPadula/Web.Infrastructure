@@ -4,6 +4,6 @@ namespace Web.Infrastructure.Microservices.Client.Logic.MethodEndpointProvider
 {
     public interface IMethodEndpointProvider
     {
-        string Provide(MethodInfo method);
+        string Provide(string methodName, string serviceName);
     }
 }
