@@ -1,4 +1,4 @@
-﻿namespace Web.Infrastructure.Microservices.Client.Logic.ResponseDeserializer
+﻿namespace Web.Infrastructure.Microservices.Client.Interfaces
 {
     public interface IResponseDeserializer
     {

@@ -1,4 +1,4 @@
-﻿namespace Web.Infrastructure.Microservices.Client.Logic.ServiceLookup
+﻿namespace Web.Infrastructure.Microservices.Client.Interfaces
 {
     public interface IServiceLookup
     {

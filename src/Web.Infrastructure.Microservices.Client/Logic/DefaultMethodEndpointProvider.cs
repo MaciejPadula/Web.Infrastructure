@@ -1,4 +1,6 @@
-﻿namespace Web.Infrastructure.Microservices.Client.Logic.MethodEndpointProvider
+﻿using Web.Infrastructure.Microservices.Client.Interfaces;
+
+namespace Web.Infrastructure.Microservices.Client.Logic
 {
     internal class DefaultMethodEndpointProvider : IMethodEndpointProvider
     {

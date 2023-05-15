@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
+using Web.Infrastructure.Microservices.Client.Interfaces;
 
-namespace Web.Infrastructure.Microservices.Client.Logic.ResponseDeserializer
+namespace Web.Infrastructure.Microservices.Client.Logic
 {
     internal class DefaultResponseDeserializer : IResponseDeserializer
     {

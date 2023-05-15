@@ -1,10 +1,7 @@
 ﻿using Web.Infrastructure.Microservices.Client.Exceptions;
-using Web.Infrastructure.Microservices.Client.Logic.HttpMessageProvider;
-using Web.Infrastructure.Microservices.Client.Logic.MethodEndpointProvider;
-using Web.Infrastructure.Microservices.Client.Logic.MethodTypeResolver;
-using Web.Infrastructure.Microservices.Client.Logic.ResponseDeserializer;
+using Web.Infrastructure.Microservices.Client.Interfaces;
 
-namespace Web.Infrastructure.Microservices.Client.Logic.MicroserviceCaller
+namespace Web.Infrastructure.Microservices.Client.Logic
 {
     internal class HttpMicroserviceCaller : IMicroserviceCaller
     {

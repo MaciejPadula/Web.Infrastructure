@@ -1,11 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Web.Infrastructure.Microservices.Client.Builders;
-using Web.Infrastructure.Microservices.Client.Logic.HttpMessageProvider;
-using Web.Infrastructure.Microservices.Client.Logic.MethodEndpointProvider;
-using Web.Infrastructure.Microservices.Client.Logic.MethodTypeResolver;
-using Web.Infrastructure.Microservices.Client.Logic.MicroserviceCaller;
-using Web.Infrastructure.Microservices.Client.Logic.ResponseDeserializer;
-using Web.Infrastructure.Microservices.Client.Logic.ServiceLookup;
+using Web.Infrastructure.Microservices.Client.Interfaces;
+using Web.Infrastructure.Microservices.Client.Logic;
 
 namespace Web.Infrastructure.Microservices.Client.Factories
 {

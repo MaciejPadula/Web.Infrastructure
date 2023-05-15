@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
+using Web.Infrastructure.Microservices.Client.Interfaces;
 
-namespace Web.Infrastructure.Microservices.Client.Logic.IncomingMethodValidator;
+namespace Web.Infrastructure.Microservices.Client.Logic;
 
 internal class DefaultIncomingMethodValidator : IIncomingMethodValidator
 {

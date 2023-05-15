@@ -1,6 +1,5 @@
 ﻿using Castle.DynamicProxy;
-using Web.Infrastructure.Microservices.Client.Logic.IncomingMethodValidator;
-using Web.Infrastructure.Microservices.Client.Logic.MicroserviceCaller;
+using Web.Infrastructure.Microservices.Client.Interfaces;
 
 namespace Web.Infrastructure.Microservices.Client;
 
@@ -9,7 +8,7 @@ public class MicroserviceClient : AsyncInterceptorBase
     private readonly IMicroserviceCaller _microserviceCaller;
     private readonly IIncomingMethodValidator _incomingMethodValidator;
 
-    public MicroserviceClient(IMicroserviceCaller microserviceCaller, IIncomingMethodValidator incomingMethodValidator)
+    internal MicroserviceClient(IMicroserviceCaller microserviceCaller, IIncomingMethodValidator incomingMethodValidator)
     {
         _microserviceCaller = microserviceCaller;
         _incomingMethodValidator = incomingMethodValidator;
@@ -29,7 +28,10 @@ public class MicroserviceClient : AsyncInterceptorBase
             throw ex;
         }
 
-        var result = await _microserviceCaller.Call<TResult>(targetMethod.Name, targetMethod.DeclaringType?.Name, invocation.Arguments);
+        var result = await _microserviceCaller.Call<TResult>(
+            targetMethod.Name, 
+            targetMethod.DeclaringType?.Name ?? string.Empty, 
+            invocation.Arguments);
 
         return result ?? default!;
     }

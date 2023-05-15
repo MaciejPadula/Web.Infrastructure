@@ -1,4 +1,4 @@
-﻿namespace Web.Infrastructure.Microservices.Client.Logic.MethodTypeResolver
+﻿namespace Web.Infrastructure.Microservices.Client.Interfaces
 {
     public interface IMethodTypeResolver
     {
