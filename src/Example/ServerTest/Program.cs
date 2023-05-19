@@ -1,4 +1,6 @@
+using ServerTest.Contract.Interfaces;
 using ServerTest.Repository;
+using Web.Infrastructure.Microservices.Server.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddSingleton<IUserRepository, UserRepository>();
+builder.Services.RegisterMicroservice<IUserService>();
 
 var app = builder.Build();
 

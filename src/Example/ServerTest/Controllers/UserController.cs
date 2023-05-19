@@ -3,11 +3,11 @@ using ServerTest.Contract.Interfaces;
 using ServerTest.Contract.Models.Requests;
 using ServerTest.Contract.Models.Responses;
 using ServerTest.Repository;
+using Web.Infrastructure.Microservices.Server;
 
 namespace ServerTest.Controllers
 {
-    [Route("[controller]")]
-    [ApiController]
+    [MicroserviceController]
     public class UserController : ControllerBase, IUserService
     {
         private readonly IUserRepository _userRepository;
@@ -17,14 +17,14 @@ namespace ServerTest.Controllers
             _userRepository = userRepository;
         }
 
-        [HttpPost("AddUser")]
-        public Task AddUser(AddUserRequest request)
+        [HttpPost]
+        public Task AddUser([FromBody] AddUserRequest request)
         {
             _userRepository.Add(request.UserName);
             return Task.CompletedTask;
         }
 
-        [HttpGet("GetUsers")]
+        [HttpGet]
         public Task<GetUsersResponse> GetUsers()
         {
             return Task.FromResult(new GetUsersResponse
