@@ -10,6 +10,18 @@ namespace Web.Infrastructure.Microservices.Client.Extensions
 {
     public static class MicroserviceClientExtensions
     {
+        public static IServiceCollection AddMicroserviceClient<TService>(this IServiceCollection services)
+            where TService : class
+        {
+            return services.AddMicroserviceClient<TService>(x => { });
+        }
+
+        public static IServiceCollection AddMicroserviceClient<TService>(this IServiceCollection services, Action<MethodTypeBuilder> builder)
+            where TService : class
+        {
+            return services.AddMicroserviceClient<TService>(typeof(TService).FullName ?? throw new ArgumentNullException(), builder);
+        }
+
         public static IServiceCollection AddMicroserviceClient<TService>(this IServiceCollection services, string serviceName)
             where TService : class
         {
