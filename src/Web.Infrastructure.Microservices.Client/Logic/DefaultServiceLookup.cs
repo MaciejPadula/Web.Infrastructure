@@ -6,7 +6,7 @@ namespace Web.Infrastructure.Microservices.Client.Logic
     {
         public Uri Lookup(string serviceName)
         {
-            return new Uri($"http://{serviceName}");
+            return new Uri($"{serviceName}");
         }
     }
 }
