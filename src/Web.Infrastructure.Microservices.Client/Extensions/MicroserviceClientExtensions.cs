@@ -49,7 +49,7 @@ namespace Web.Infrastructure.Microservices.Client.Extensions
         private static IServiceCollection AddCastleCoreClient<TService>(this IServiceCollection services, Func<IServiceProvider, IMicroserviceCaller> options)
             where TService : class
         {
-            services.AddSingleton(s =>
+            services.AddScoped(s =>
             {
                 var generator = new ProxyGenerator();
                 var interceptor = new MicroserviceClient(options.Invoke(s), s.GetRequiredService<IIncomingMethodValidator>());
