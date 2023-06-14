@@ -8,9 +8,9 @@ public class BaseMethodEndpointProvider : IMethodEndpointProvider
 
     public BaseMethodEndpointProvider(string template)
     {
-        if (!template.Contains("[controller]"))
+        if (!template.Contains("{controller}"))
         {
-            throw new ArgumentException("Template should contain [controller] string");
+            throw new ArgumentException("Template should contain {controller} string");
         }
         _template = template;
     }
@@ -23,7 +23,7 @@ public class BaseMethodEndpointProvider : IMethodEndpointProvider
     public string Provide(string methodName, string serviceName)
     {
         return _template
-            .Replace("[action]", methodName)
-            .Replace("[controller]", serviceName);
+            .Replace("{action}", methodName)
+            .Replace("{controller}", serviceName);
     }
 }
