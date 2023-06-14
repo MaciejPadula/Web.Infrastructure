@@ -4,48 +4,56 @@ This repository will contain my implementations of some basic web infrastructure
 # Web.Infrastructure.Microservices.Server
 Provides extensions for Microsoft.DependencyInjection package that helps with registering your ASP.NET Controller as microservice interface. For example if you want to give clients contract that contains interface `IUsersService` you can create Controller that implements this and register it as Microservice:
 
-`IUsersService.cs`
+`IUserService.cs`
 ```C#
 namespace Server.Contract;
 
-public interface IUsersService
+public interface IUserService
 {
-    void Register(string userName);
-    List<string> GetUsers();
+    Task AddUser(AddUserRequest request);
+    Task<GetUsersResponse> GetUsers();
 }
 ```
 
-`UsersController.cs`
+`UserController.cs`
 ```C#
 namespace Server;
 
-public class UsersController : BaseController, IUsersService
+public class UserController : ControllerBase, IUserService
 {
-    private readonly List<string> _users;
+    private readonly IUserRepository _userRepository;
 
-    public UsersController()
+    public UserController(IUserRepository userRepository)
     {
-        _users = new List<string>();
+        _userRepository = userRepository;
     }
 
-    [HttpPost("Register/{userName}")]
-    public void Register(string userName)
+    [HttpPost]
+    public Task AddUser([FromBody] AddUserRequest request)
     {
-        _users.Add(userName);
+        _userRepository.Add(request.UserName);
+        return Task.CompletedTask;
     }
 
-    [HttpGet("GetUsers")]
-    public List<string> GetUsers()
+    [HttpGet]
+    public Task<GetUsersResponse> GetUsers()
     {
-        return _users;
+        return Task.FromResult(new GetUsersResponse
+        {
+            Users = _userRepository.Get()
+        });
     }
 }
 ```
 
 `Program.cs`
 ```C#
+builder.Services.AddMicroserviceEndpointResolver();
 ...
-services.RegisterMicroservice<IUsersService, UsersController>();
+var app = builder.Build();
+...
+app.RegisterMicroservice<IUserService, UserController>();
+app.Run();
 ...
 ```
 Now your microservice is ready to use.
@@ -87,7 +95,7 @@ var provider = services.BuildServiceProvider();
 
 var userService = provider.GetRequiredService<IUsersService>();
 
-var users = userService.GetUsers(); // will call your api and return synchronous data
+var users = await userService.GetUsers(); // will call your api and return asynchronous data
 ```
 
 `Dependency Injection:`
@@ -105,9 +113,9 @@ public class SomeController : BaseController
     }
 
     [HttpGet("GetUsersFromService")]
-    public IActionResult GetUsersFromService()
+    public async Task<IActionResult> GetUsersFromService()
     {
-        var users = _userService.GetUsers();
+        var users = await _userService.GetUsers();
         return Ok(users);
     }
 }
@@ -127,6 +135,45 @@ namespace Web.Infrastructure.Microservices.Client.Logic.ServiceLookup
     public interface IServiceLookup
     {
         Uri Lookup(string serviceName);
+    }
+}
+```
+There are two basic implementations ready to use: \
+*Default*
+```C#
+namespace Web.Infrastructure.Microservices.Client.Logic
+{
+    internal class DefaultServiceLookup : IServiceLookup
+    {
+        public Uri Lookup(string serviceName)
+        {
+            return new Uri($"{serviceName}");
+        }
+    }
+}
+```
+`Configuration`
+```C#
+namespace Web.Infrastructure.Microservices.Client.Configuration.Logic
+{
+    public class ConfigurationServiceLookup : IServiceLookup
+    {
+        private readonly IConfiguration _configuration;
+        private readonly string _microservicesParentPrefix;
+
+        public ConfigurationServiceLookup(
+            IConfiguration configuration,
+            string microservicesParentPrefix)
+        {
+            _configuration = configuration;
+            _microservicesParentPrefix = microservicesParentPrefix;
+        }
+
+        public Uri Lookup(string serviceName)
+        {
+            return new Uri(_configuration[$"{_microservicesParentPrefix}:{serviceName}"] 
+                ?? string.Empty);
+        }
     }
 }
 ```
