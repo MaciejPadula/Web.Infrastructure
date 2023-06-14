@@ -3,11 +3,9 @@ using ServerTest.Contract.Interfaces;
 using ServerTest.Contract.Models.Requests;
 using ServerTest.Contract.Models.Responses;
 using ServerTest.Repository;
-using Web.Infrastructure.Microservices.Server;
 
 namespace ServerTest.Controllers
 {
-    [MicroserviceController]
     public class UserController : ControllerBase, IUserService
     {
         private readonly IUserRepository _userRepository;

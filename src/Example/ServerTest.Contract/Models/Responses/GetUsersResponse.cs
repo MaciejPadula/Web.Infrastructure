@@ -2,6 +2,6 @@
 {
     public class GetUsersResponse
     {
-        public List<User> Users { get; set; }
+        public List<User> Users { get; set; } = default!;
     }
 }
