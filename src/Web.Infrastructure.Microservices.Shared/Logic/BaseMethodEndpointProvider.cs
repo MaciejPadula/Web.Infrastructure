@@ -2,7 +2,7 @@
 
 namespace Web.Infrastructure.Microservices.Shared.Logic;
 
-public class BaseMethodEndpointProvider : IMethodEndpointProvider
+public abstract class BaseMethodEndpointProvider : IMethodEndpointProvider
 {
     private readonly string _template;
 

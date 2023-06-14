@@ -24,27 +24,16 @@ namespace Web.Infrastructure.Microservices.Server.Extensions
             return builder;
         }
 
-        public static IServiceCollection AddMicroservicesEndpointResolver<T>(this IServiceCollection services)
+        public static IServiceCollection AddMicroserviceEndpointResolver<T>(this IServiceCollection services)
             where T : class, IMethodEndpointProvider
         {
             services.TryAddSingleton<IMethodEndpointProvider, T>();
             return services;
         }
 
-        public static IServiceCollection AddMicroservicesEndpointResolver(this IServiceCollection services)
+        public static IServiceCollection AddMicroserviceEndpointResolver(this IServiceCollection services)
         {
-            return services.AddMicroservicesEndpointResolver<DefaultMethodEndpointProvider>();
+            return services.AddMicroserviceEndpointResolver<DefaultMethodEndpointProvider>();
         }
-
-        //public static IServiceCollection TryRegisterEndpointProvider(this IServiceCollection services, IMethodEndpointProvider provider)
-        //{
-        //    services.TryAddTransient(s =>
-        //    {
-        //        HiddenContainer.MethodEndpointProvider = provider;
-        //        return provider;
-        //    });
-
-        //    return services;
-        //}
     }
 }

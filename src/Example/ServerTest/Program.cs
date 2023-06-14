@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddMicroservicesEndpointResolver();
+builder.Services.AddMicroserviceEndpointResolver();
 builder.Services.AddControllers();
 builder.Services.AddSingleton<IUserRepository, UserRepository>();
 
