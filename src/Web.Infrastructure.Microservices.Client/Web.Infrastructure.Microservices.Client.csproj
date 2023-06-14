@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Title>Web.Infrastructure.Microservices.Client</Title>
-    <Version>1.0.3</Version>
+    <Version>1.0.4</Version>
     <Authors>Maciej Padula</Authors>
   </PropertyGroup>
 
@@ -18,6 +18,10 @@
     <PackageReference Include="Castle.Core.AsyncInterceptor" Version="2.1.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Web.Infrastructure.Microservices.Shared\Web.Infrastructure.Microservices.Shared.csproj" />
   </ItemGroup>
 
 </Project>

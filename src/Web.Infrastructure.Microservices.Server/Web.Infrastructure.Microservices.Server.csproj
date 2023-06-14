@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Title>Web.Infrastructure.Microservices.Server</Title>
+    <Version>1.0.4</Version>
+    <Authors>Maciej Padula</Authors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Web.Infrastructure.Microservices.Shared\Web.Infrastructure.Microservices.Shared.csproj" />
+  </ItemGroup>
+
+</Project>
