@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json;
 using Web.Infrastructure.Microservices.Client.Interfaces;
 
 namespace Web.Infrastructure.Microservices.Client.Logic
@@ -12,7 +12,7 @@ namespace Web.Infrastructure.Microservices.Client.Logic
                 return null;
             }
 
-            return JsonConvert.DeserializeObject(response, returnType);
+            return JsonSerializer.Deserialize(response, returnType);
         }
 
         public T? Deserialize<T>(string response)
