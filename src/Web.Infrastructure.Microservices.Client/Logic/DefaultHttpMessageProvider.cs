@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System.Text;
+﻿using System.Text;
+using System.Text.Json;
 using Web.Infrastructure.Microservices.Client.Interfaces;
 
 namespace Web.Infrastructure.Microservices.Client.Logic
@@ -10,7 +10,7 @@ namespace Web.Infrastructure.Microservices.Client.Logic
         {
             var uri = baseUrl.AbsoluteUri ?? "";
 
-            var data = args?.Length > 0 ? JsonConvert.SerializeObject(args?[0] ?? new { }) : "{}";
+            var data = args?.Length > 0 ? JsonSerializer.Serialize(args?[0] ?? new { }) : "{}";
 
             var content = new StringContent(data, Encoding.UTF8, "application/json");
 
