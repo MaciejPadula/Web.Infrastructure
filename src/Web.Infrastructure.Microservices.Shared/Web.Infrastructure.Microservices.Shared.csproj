@@ -4,6 +4,9 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Title>Web.Infrastructure.Microservices</Title>
+    <Version>1.0.6</Version>
+    <Authors>Maciej Padula</Authors>
   </PropertyGroup>
 
 </Project>
