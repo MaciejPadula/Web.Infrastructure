@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Title>Web.Infrastructure.Microservices.Server</Title>
-    <Version>1.0.6</Version>
+    <Version>1.0.7</Version>
     <Authors>Maciej Padula</Authors>
   </PropertyGroup>
 

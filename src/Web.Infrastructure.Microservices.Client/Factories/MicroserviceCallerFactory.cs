@@ -2,6 +2,7 @@
 using Web.Infrastructure.Microservices.Client.Builders;
 using Web.Infrastructure.Microservices.Client.Interfaces;
 using Web.Infrastructure.Microservices.Client.Logic;
+using Web.Infrastructure.Microservices.Shared.Interfaces;
 
 namespace Web.Infrastructure.Microservices.Client.Factories
 {
