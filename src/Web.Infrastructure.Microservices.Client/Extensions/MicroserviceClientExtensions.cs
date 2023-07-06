@@ -36,11 +36,11 @@ namespace Web.Infrastructure.Microservices.Client.Extensions
             builder(methodBuilder);
 
             services.TryAddTransient<HttpClient>();
-            services.TryAddTransient<IMethodEndpointProvider, DefaultMethodEndpointProvider>();
-            services.TryAddTransient<IHttpMessageProvider, DefaultHttpMessageProvider>();
-            services.TryAddTransient<IServiceLookup, DefaultServiceLookup>();
-            services.TryAddTransient<IResponseDeserializer, DefaultResponseDeserializer>();
-            services.TryAddTransient<IIncomingMethodValidator, DefaultIncomingMethodValidator>();
+            services.TryAddSingleton<IMethodEndpointProvider, DefaultMethodEndpointProvider>();
+            services.TryAddSingleton<IHttpMessageProvider, DefaultHttpMessageProvider>();
+            services.TryAddSingleton<IServiceLookup, DefaultServiceLookup>();
+            services.TryAddSingleton<IResponseDeserializer, DefaultResponseDeserializer>();
+            services.TryAddSingleton<IIncomingMethodValidator, DefaultIncomingMethodValidator>();
 
             services.AddCastleCoreClient<TService>(s => MicroserviceCallerFactory.CreateHttp(s, methodBuilder, serviceName), lifetime);
 
