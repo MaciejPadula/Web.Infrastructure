@@ -12,7 +12,7 @@ namespace Web.Infrastructure.Microservices.Client.Configuration.Extensions
 
         public static IServiceCollection AddConfigurationServiceLookup(this IServiceCollection services, string? microservicesConfigurationParent)
         {
-            services.TryAddScoped<IServiceLookup>(provider => 
+            services.TryAddTransient<IServiceLookup>(provider => 
                 new ConfigurationServiceLookup(
                     provider.GetRequiredService<IConfiguration>(), 
                     microservicesConfigurationParent ?? _microservicesConfigurationParent)

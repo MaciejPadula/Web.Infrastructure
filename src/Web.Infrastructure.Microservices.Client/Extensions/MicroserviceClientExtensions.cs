@@ -10,52 +10,57 @@ namespace Web.Infrastructure.Microservices.Client.Extensions
 {
     public static class MicroserviceClientExtensions
     {
-        public static IServiceCollection AddMicroserviceClient<TService>(this IServiceCollection services)
+        public static IServiceCollection AddMicroserviceClient<TService>(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Scoped)
             where TService : class
         {
-            return services.AddMicroserviceClient<TService>(x => { });
+            return services.AddMicroserviceClient<TService>(x => { }, lifetime);
         }
 
-        public static IServiceCollection AddMicroserviceClient<TService>(this IServiceCollection services, Action<MethodTypeBuilder> builder)
+        public static IServiceCollection AddMicroserviceClient<TService>(this IServiceCollection services, Action<MethodTypeBuilder> builder, ServiceLifetime lifetime = ServiceLifetime.Scoped)
             where TService : class
         {
-            return services.AddMicroserviceClient<TService>(typeof(TService).FullName ?? throw new ArgumentNullException(), builder);
+            var typeName = typeof(TService).FullName ?? throw new ArgumentNullException(nameof(TService));
+            return services.AddMicroserviceClient<TService>(typeName, builder, lifetime);
         }
 
-        public static IServiceCollection AddMicroserviceClient<TService>(this IServiceCollection services, string serviceName)
+        public static IServiceCollection AddMicroserviceClient<TService>(this IServiceCollection services, string serviceName, ServiceLifetime lifetime = ServiceLifetime.Scoped)
             where TService : class
         {
-            return services.AddMicroserviceClient<TService>(serviceName, x => { });
+            return services.AddMicroserviceClient<TService>(serviceName, x => { }, lifetime);
         }
 
-        public static IServiceCollection AddMicroserviceClient<TService>(this IServiceCollection services, string serviceName, Action<MethodTypeBuilder> builder)
+        public static IServiceCollection AddMicroserviceClient<TService>(this IServiceCollection services, string serviceName, Action<MethodTypeBuilder> builder, ServiceLifetime lifetime = ServiceLifetime.Scoped)
             where TService : class
         {
             var methodBuilder = new MethodTypeBuilder();
-            builder.Invoke(methodBuilder);
+            builder(methodBuilder);
 
             services.TryAddTransient<HttpClient>();
             services.TryAddTransient<IMethodEndpointProvider, DefaultMethodEndpointProvider>();
             services.TryAddTransient<IHttpMessageProvider, DefaultHttpMessageProvider>();
-            services.TryAddScoped<IServiceLookup, DefaultServiceLookup>();
+            services.TryAddTransient<IServiceLookup, DefaultServiceLookup>();
             services.TryAddTransient<IResponseDeserializer, DefaultResponseDeserializer>();
             services.TryAddTransient<IIncomingMethodValidator, DefaultIncomingMethodValidator>();
 
-            services.AddCastleCoreClient<TService>(s => MicroserviceCallerFactory.CreateHttp(s, methodBuilder, serviceName));
+            services.AddCastleCoreClient<TService>(s => MicroserviceCallerFactory.CreateHttp(s, methodBuilder, serviceName), lifetime);
 
             return services;
         }
 
-        private static IServiceCollection AddCastleCoreClient<TService>(this IServiceCollection services, Func<IServiceProvider, IMicroserviceCaller> options)
+        private static IServiceCollection AddCastleCoreClient<TService>(this IServiceCollection services, Func<IServiceProvider, IMicroserviceCaller> options, ServiceLifetime lifetime)
             where TService : class
         {
-            services.AddScoped(s =>
-            {
-                var generator = new ProxyGenerator();
-                var interceptor = new MicroserviceClient(options.Invoke(s), s.GetRequiredService<IIncomingMethodValidator>());
+            services.Add(new ServiceDescriptor(
+                typeof(TService),
+                s =>
+                {
+                    var generator = new ProxyGenerator();
+                    var interceptor = new MicroserviceClient(options.Invoke(s), s.GetRequiredService<IIncomingMethodValidator>());
 
-                return generator.CreateInterfaceProxyWithoutTarget<TService>(interceptor.ToInterceptor());
-            });
+                    return generator.CreateInterfaceProxyWithoutTarget<TService>(interceptor.ToInterceptor());
+                },
+                lifetime)
+            );
 
             return services;
         }
