@@ -5,8 +5,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Title>Web.Infrastructure.Microservices</Title>
-    <Version>1.0.7</Version>
+    <Version>1.0.8</Version>
     <Authors>Maciej Padula</Authors>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+  </ItemGroup>
 
 </Project>

@@ -5,7 +5,7 @@ using Web.Infrastructure.Microservices.Client.Builders;
 using Web.Infrastructure.Microservices.Client.Factories;
 using Web.Infrastructure.Microservices.Client.Interfaces;
 using Web.Infrastructure.Microservices.Client.Logic;
-using Web.Infrastructure.Microservices.Shared.Interfaces;
+using Web.Infrastructure.Microservices.Shared.Extensions;
 
 namespace Web.Infrastructure.Microservices.Client.Extensions
 {
@@ -36,14 +36,13 @@ namespace Web.Infrastructure.Microservices.Client.Extensions
             var methodBuilder = new MethodTypeBuilder();
             builder(methodBuilder);
 
-            services.TryAddTransient<HttpClient>();
-            services.TryAddSingleton<IMethodEndpointProvider, DefaultMethodEndpointProvider>();
+            services.AddMicroserviceEndpointResolver();
             services.TryAddSingleton<IHttpMessageProvider, DefaultHttpMessageProvider>();
             services.TryAddSingleton<IServiceLookup, DefaultServiceLookup>();
             services.TryAddSingleton<IResponseDeserializer, DefaultResponseDeserializer>();
             services.TryAddSingleton<IIncomingMethodValidator, DefaultIncomingMethodValidator>();
 
-            services.AddCastleCoreClient<TService>(s => MicroserviceCallerFactory.CreateHttp(s, methodBuilder, serviceName), lifetime);
+            services.AddCastleCoreClient<TService>(s => MicroserviceCallerFactory.CreateHttp(s, methodBuilder, typeof(TService).Namespace ?? string.Empty, serviceName), lifetime);
 
             return services;
         }

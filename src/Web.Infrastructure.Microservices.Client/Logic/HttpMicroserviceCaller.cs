@@ -40,14 +40,21 @@ namespace Web.Infrastructure.Microservices.Client.Logic
                 _methodTypeResolver.Resolve(methodName)
             );
 
-            var response = await _httpClient.SendAsync(message);
-
-            if (response?.StatusCode != HttpStatusCode.OK)
+            try
             {
-                throw new MicroserviceResponseException(response);
-            }
+                var response = await _httpClient.SendAsync(message);
 
-            return _responseDeserializer.Deserialize(response?.Content?.ReadAsStringAsync().Result ?? "null", type);
+                if (response?.StatusCode != HttpStatusCode.OK)
+                {
+                    throw new MicroserviceResponseException(response);
+                }
+
+                return _responseDeserializer.Deserialize(response?.Content?.ReadAsStringAsync().Result ?? "null", type);
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new MicroserviceResponseException(ex.Message, ex.StatusCode ?? HttpStatusCode.NotFound, ex);
+            }
         }
     }
 }
