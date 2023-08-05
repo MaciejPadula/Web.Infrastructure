@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Web.Infrastructure.Microservices.Client.Interfaces;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Web.Infrastructure.Microservices.Client.Logic;
+using Web.Infrastructure.Microservices.Shared.Interfaces;
 
 namespace Web.Infrastructure.Microservices.Server.Extensions
 {

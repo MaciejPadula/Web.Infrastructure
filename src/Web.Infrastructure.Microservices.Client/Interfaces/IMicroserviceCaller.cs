@@ -2,7 +2,7 @@
 {
     internal interface IMicroserviceCaller
     {
-        Task<object?> Call(string methodName, string controllerName, object?[]? args, Type type);
-        Task<TResult?> Call<TResult>(string methodName, string controllerName, object?[]? args);
+        Task<object?> Call(string methodName, string serviceName, object?[]? args, Type type);
+        Task<TResult?> Call<TResult>(string methodName, string serviceName, object?[]? args);
     }
 }

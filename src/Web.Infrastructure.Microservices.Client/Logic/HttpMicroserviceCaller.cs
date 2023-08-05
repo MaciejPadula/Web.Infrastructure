@@ -1,5 +1,7 @@
-﻿using Web.Infrastructure.Microservices.Client.Exceptions;
+﻿using System.Net;
+using Web.Infrastructure.Microservices.Client.Exceptions;
 using Web.Infrastructure.Microservices.Client.Interfaces;
+using Web.Infrastructure.Microservices.Shared.Interfaces;
 
 namespace Web.Infrastructure.Microservices.Client.Logic
 {
@@ -22,14 +24,14 @@ namespace Web.Infrastructure.Microservices.Client.Logic
             _baseUrl = baseUrl;
         }
 
-        public async Task<TResult?> Call<TResult>(string methodName, string controllerName, object?[]? args)
+        public async Task<TResult?> Call<TResult>(string methodName, string serviceName, object?[]? args)
         {
-            return (TResult?)await Call(methodName, controllerName, args, typeof(TResult));
+            return (TResult?)await Call(methodName, serviceName, args, typeof(TResult));
         }
 
-        public async Task<object?> Call(string methodName, string controllerName, object?[]? args, Type type)
+        public async Task<object?> Call(string methodName, string serviceName, object?[]? args, Type type)
         {
-            var endpoint = _methodEndpointProvider.Provide(methodName, controllerName);
+            var endpoint = _methodEndpointProvider.ProvideEndpoint(methodName, serviceName);
 
             var message = _httpMessageProvider.Provide(
                 _baseUrl,
@@ -40,7 +42,7 @@ namespace Web.Infrastructure.Microservices.Client.Logic
 
             var response = await _httpClient.SendAsync(message);
 
-            if (!(response?.IsSuccessStatusCode ?? false))
+            if (response?.StatusCode != HttpStatusCode.OK)
             {
                 throw new MicroserviceResponseException(response);
             }

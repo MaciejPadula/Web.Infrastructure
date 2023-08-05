@@ -1,8 +1,8 @@
-﻿namespace Web.Infrastructure.Microservices.Client.Interfaces
+﻿namespace Web.Infrastructure.Microservices.Shared.Interfaces
 {
     public interface IMethodEndpointProvider
     {
-        string Provide(string methodName, string serviceName);
+        string ProvideEndpoint(string methodName, string serviceName);
         string GetControllerActionTemplate(string controllerName);
     }
 }
