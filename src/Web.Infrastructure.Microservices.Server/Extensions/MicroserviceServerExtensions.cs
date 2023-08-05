@@ -23,17 +23,5 @@ namespace Web.Infrastructure.Microservices.Server.Extensions
 
             return builder;
         }
-
-        public static IServiceCollection AddMicroserviceEndpointResolver<T>(this IServiceCollection services)
-            where T : class, IMethodEndpointProvider
-        {
-            services.TryAddSingleton<IMethodEndpointProvider, T>();
-            return services;
-        }
-
-        public static IServiceCollection AddMicroserviceEndpointResolver(this IServiceCollection services)
-        {
-            return services.AddMicroserviceEndpointResolver<DefaultMethodEndpointProvider>();
-        }
     }
 }

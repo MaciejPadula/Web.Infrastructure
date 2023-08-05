@@ -2,6 +2,6 @@
 {
     public interface IServiceLookup
     {
-        Uri Lookup(string serviceName);
+        Uri? Lookup(string serviceName);
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Web.Infrastructure.Microservices.Server.Extensions;
+using Web.Infrastructure.Microservices.Shared.Extensions;
 
 namespace Web.Infrastructure.Microservices.Server.Builders;
 

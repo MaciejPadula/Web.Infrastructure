@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Web.Infrastructure.Microservices.Client.Configuration\Web.Infrastructure.Microservices.Client.Configuration.csproj" />
     <ProjectReference Include="..\..\Web.Infrastructure.Microservices.Client\Web.Infrastructure.Microservices.Client.csproj" />
     <ProjectReference Include="..\ServerTest.Contract\ServerTest.Contract.csproj" />
   </ItemGroup>

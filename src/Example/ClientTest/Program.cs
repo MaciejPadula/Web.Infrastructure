@@ -1,11 +1,22 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using ServerTest.Contract.Interfaces;
 using Web.Infrastructure.Microservices.Client.Exceptions;
 using Web.Infrastructure.Microservices.Client.Extensions;
+using Web.Infrastructure.Microservices.Client.Configuration.Extensions;
+
+var config = new ConfigurationBuilder()
+    .AddInMemoryCollection(new List<KeyValuePair<string, string?>>()
+    {
+        new("MSRV:ServerTest.Contract.Interfaces", "http://localhost:5051")
+    })
+    .Build();
 
 var services = new ServiceCollection();
 
-services.AddMicroserviceClient<IUserService>("localhost:5051", builder =>
+services.AddSingleton<IConfiguration>(config);
+services.AddConfigurationServiceLookup("MSRV");
+services.AddMicroserviceClient<IUserService>(builder =>
 {
     builder.AddRequestMethodType("GetUsers", HttpMethod.Get);
 });

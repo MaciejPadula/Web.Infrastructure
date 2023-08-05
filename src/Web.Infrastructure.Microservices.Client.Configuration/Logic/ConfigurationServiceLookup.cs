@@ -14,9 +14,16 @@ namespace Web.Infrastructure.Microservices.Client.Configuration.Logic
             _microservicesParentPrefix = microservicesParentPrefix;
         }
 
-        public Uri Lookup(string serviceName)
+        public Uri? Lookup(string serviceName)
         {
-            return new Uri(_configuration[$"{_microservicesParentPrefix}:{serviceName}"] ?? string.Empty);
+            var result = _configuration[$"{_microservicesParentPrefix}:{serviceName}"];
+
+            if (string.IsNullOrEmpty(result))
+            {
+                return null;
+            }
+
+            return new Uri(result);
         }
     }
 }

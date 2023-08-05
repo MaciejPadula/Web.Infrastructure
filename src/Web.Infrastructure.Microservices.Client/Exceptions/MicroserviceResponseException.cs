@@ -10,8 +10,8 @@ namespace Web.Infrastructure.Microservices.Client.Exceptions
             : this(response?.ReasonPhrase ?? string.Empty, response?.StatusCode ?? HttpStatusCode.NotFound)
         { }
 
-        internal MicroserviceResponseException(string message, HttpStatusCode statusCode)
-            : base(message)
+        internal MicroserviceResponseException(string message, HttpStatusCode statusCode, Exception innerException = default!)
+            : base(message, innerException)
         {
             StatusCode = statusCode;
         }
