@@ -13,10 +13,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerTest.Contract", "Exam
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerTest", "Example\ServerTest\ServerTest.csproj", "{71A0C694-C890-4D3F-9845-4C8E97CD884D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Infrastructure.Microservices.Client.Configuration", "Web.Infrastructure.Microservices.Client.Configuration\Web.Infrastructure.Microservices.Client.Configuration.csproj", "{F937CB83-361E-4F4C-91E1-7EB747943278}"
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Infrastructure.Microservices.Server", "Web.Infrastructure.Microservices.Server\Web.Infrastructure.Microservices.Server.csproj", "{C150D289-0B4E-48E0-AF2D-0014C823A897}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Infrastructure.Microservices.Client.Configuration", "Web.Infrastructure.Microservices.Client.Configuration\Web.Infrastructure.Microservices.Client.Configuration.csproj", "{F937CB83-361E-4F4C-91E1-7EB747943278}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Infrastructure.Microservices.Shared", "Web.Infrastructure.Microservices.Shared\Web.Infrastructure.Microservices.Shared.csproj", "{A7C80B93-198E-4FD5-81A6-461ECF3B773C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Infrastructure.Microservices.Server", "Web.Infrastructure.Microservices.Server\Web.Infrastructure.Microservices.Server.csproj", "{C150D289-0B4E-48E0-AF2D-0014C823A897}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.Infrastructure.Microservices.Shared", "Web.Infrastructure.Microservices.Shared\Web.Infrastructure.Microservices.Shared.csproj", "{A7C80B93-198E-4FD5-81A6-461ECF3B773C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Infrastructure.Microservices.Client.Tests", "Web.Infrastructure.Microservices.Client.Tests\Web.Infrastructure.Microservices.Client.Tests.csproj", "{C358205B-9959-4AB4-8278-D474CAB03513}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E3710850-936D-4A8C-AFB5-ED60F362102B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,6 +57,10 @@ Global
 		{A7C80B93-198E-4FD5-81A6-461ECF3B773C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7C80B93-198E-4FD5-81A6-461ECF3B773C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7C80B93-198E-4FD5-81A6-461ECF3B773C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C358205B-9959-4AB4-8278-D474CAB03513}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C358205B-9959-4AB4-8278-D474CAB03513}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C358205B-9959-4AB4-8278-D474CAB03513}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C358205B-9959-4AB4-8278-D474CAB03513}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +69,7 @@ Global
 		{3D3BFCE2-9C0C-4568-AB84-FFADFB23CFD3} = {CDBF8A7E-4E53-46EF-A51A-AD7F0A400788}
 		{4D72547F-70A2-474D-8D64-EA8C41D1808F} = {CDBF8A7E-4E53-46EF-A51A-AD7F0A400788}
 		{71A0C694-C890-4D3F-9845-4C8E97CD884D} = {CDBF8A7E-4E53-46EF-A51A-AD7F0A400788}
+		{C358205B-9959-4AB4-8278-D474CAB03513} = {E3710850-936D-4A8C-AFB5-ED60F362102B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FD412D12-2E12-4B77-A367-41BE18BCF33A}

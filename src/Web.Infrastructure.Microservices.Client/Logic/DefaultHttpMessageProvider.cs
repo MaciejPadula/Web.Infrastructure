@@ -4,7 +4,7 @@ using Web.Infrastructure.Microservices.Client.Interfaces;
 
 namespace Web.Infrastructure.Microservices.Client.Logic
 {
-    internal class DefaultHttpMessageProvider : IHttpMessageProvider
+    public class DefaultHttpMessageProvider : IHttpMessageProvider
     {
         public HttpRequestMessage Provide(Uri baseUrl, string endpoint, object?[]? args, HttpMethod method)
         {
