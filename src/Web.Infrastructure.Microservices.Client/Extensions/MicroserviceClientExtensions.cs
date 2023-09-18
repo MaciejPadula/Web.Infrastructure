@@ -11,38 +11,47 @@ namespace Web.Infrastructure.Microservices.Client.Extensions
 {
     public static class MicroserviceClientExtensions
     {
-        public static IServiceCollection AddMicroserviceClient<TService>(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Scoped)
+        private const ServiceLifetime DefaultServiceLifetime = ServiceLifetime.Scoped;
+
+        public static IServiceCollection AddMicroserviceClient<TService>(this IServiceCollection services, ServiceLifetime? lifetime = null)
             where TService : class
         {
             return services.AddMicroserviceClient<TService>(x => { }, lifetime);
         }
 
-        public static IServiceCollection AddMicroserviceClient<TService>(this IServiceCollection services, Action<MethodTypeBuilder> builder, ServiceLifetime lifetime = ServiceLifetime.Scoped)
+        public static IServiceCollection AddMicroserviceClient<TService>(this IServiceCollection services, Action<MethodTypeBuilder> builder, ServiceLifetime? lifetime = null)
             where TService : class
         {
             var typeName = typeof(TService).FullName ?? throw new ArgumentNullException(nameof(TService));
             return services.AddMicroserviceClient<TService>(typeName, builder, lifetime);
         }
 
-        public static IServiceCollection AddMicroserviceClient<TService>(this IServiceCollection services, string serviceName, ServiceLifetime lifetime = ServiceLifetime.Scoped)
+        public static IServiceCollection AddMicroserviceClient<TService>(this IServiceCollection services, string serviceName, ServiceLifetime? lifetime = null)
             where TService : class
         {
             return services.AddMicroserviceClient<TService>(serviceName, x => { }, lifetime);
         }
 
-        public static IServiceCollection AddMicroserviceClient<TService>(this IServiceCollection services, string serviceName, Action<MethodTypeBuilder> builder, ServiceLifetime lifetime = ServiceLifetime.Scoped)
+        public static IServiceCollection AddMicroserviceClient<TService>(this IServiceCollection services, string serviceName, Action<MethodTypeBuilder> builder, ServiceLifetime? lifetime = null)
             where TService : class
         {
             var methodBuilder = new MethodTypeBuilder();
             builder(methodBuilder);
 
             services.AddMicroserviceEndpointResolver();
-            services.TryAddSingleton<IHttpMessageProvider, DefaultHttpMessageProvider>();
-            services.TryAddSingleton<IServiceLookup, DefaultServiceLookup>();
-            services.TryAddSingleton<IResponseDeserializer, DefaultResponseDeserializer>();
-            services.TryAddSingleton<IIncomingMethodValidator, DefaultIncomingMethodValidator>();
+            services.TryAddTransient<IHttpMessageProvider, DefaultHttpMessageProvider>();
+            services.TryAddTransient<IServiceLookup, DefaultServiceLookup>();
+            services.TryAddTransient<IResponseDeserializer, DefaultResponseDeserializer>();
+            services.TryAddTransient<IIncomingMethodValidator, DefaultIncomingMethodValidator>();
+            services.AddHttpClient();
 
-            services.AddCastleCoreClient<TService>(s => MicroserviceCallerFactory.CreateHttp(s, methodBuilder, typeof(TService).Namespace ?? string.Empty, serviceName), lifetime);
+            services.AddCastleCoreClient<TService>(provider => 
+                MicroserviceCallerFactory.CreateHttp(
+                    provider,
+                    methodBuilder,
+                    typeof(TService).Namespace ?? string.Empty,
+                    serviceName),
+                lifetime ?? DefaultServiceLifetime);
 
             return services;
         }

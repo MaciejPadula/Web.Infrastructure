@@ -10,7 +10,7 @@ namespace Web.Infrastructure.Microservices.Shared.Extensions
         public static IServiceCollection AddMicroserviceEndpointResolver<T>(this IServiceCollection services)
             where T : class, IMethodEndpointProvider
         {
-            services.TryAddSingleton<IMethodEndpointProvider, T>();
+            services.TryAddTransient<IMethodEndpointProvider, T>();
             return services;
         }
 

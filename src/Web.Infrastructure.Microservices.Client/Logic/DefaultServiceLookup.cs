@@ -4,7 +4,7 @@ namespace Web.Infrastructure.Microservices.Client.Logic
 {
     internal class DefaultServiceLookup : IServiceLookup
     {
-        public Uri Lookup(string serviceName)
+        public Uri? Lookup(string serviceName)
         {
             return new Uri($"{serviceName}");
         }

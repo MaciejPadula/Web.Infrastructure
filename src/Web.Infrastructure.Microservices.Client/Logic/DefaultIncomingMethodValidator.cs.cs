@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Web.Infrastructure.Microservices.Client.Extensions;
 using Web.Infrastructure.Microservices.Client.Interfaces;
 
 namespace Web.Infrastructure.Microservices.Client.Logic;
@@ -7,25 +8,21 @@ internal class DefaultIncomingMethodValidator : IIncomingMethodValidator
 {
     public bool Validate(MethodInfo? methodInfo, out Exception ex)
     {
-        if (methodInfo == null)
+        if (methodInfo is null)
         {
             ex = new ArgumentNullException(nameof(methodInfo));
             return false;
         }
 
-        var isGeneric = methodInfo.ReturnType.IsGenericType;
-        var isGenericTask = isGeneric && methodInfo.ReturnType.GetGenericTypeDefinition() == typeof(Task<>);
-        var isNonGenericTask = !isGeneric && methodInfo.ReturnType == typeof(Task);
-
-        if (!isGenericTask && !isNonGenericTask)
+        if (!methodInfo.IsGenericTask() && !methodInfo.IsNonGenericTask())
         {
             ex = new Exception(nameof(methodInfo.ReturnType));
             return false;
         }
 
-        if (methodInfo.DeclaringType == null)
+        if (methodInfo.DeclaringType is null)
         {
-            ex = new ArgumentNullException(nameof(methodInfo.DeclaringType));
+            ex = new NullReferenceException(nameof(methodInfo.DeclaringType));
             return false;
         }
 
