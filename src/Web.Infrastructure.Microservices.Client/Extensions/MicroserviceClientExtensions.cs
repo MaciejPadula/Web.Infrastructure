@@ -41,6 +41,7 @@ namespace Web.Infrastructure.Microservices.Client.Extensions
             services.TryAddSingleton<IServiceLookup, DefaultServiceLookup>();
             services.TryAddSingleton<IResponseDeserializer, DefaultResponseDeserializer>();
             services.TryAddSingleton<IIncomingMethodValidator, DefaultIncomingMethodValidator>();
+            services.AddHttpClient();
 
             services.AddCastleCoreClient<TService>(s => MicroserviceCallerFactory.CreateHttp(s, methodBuilder, typeof(TService).Namespace ?? string.Empty, serviceName), lifetime);
 

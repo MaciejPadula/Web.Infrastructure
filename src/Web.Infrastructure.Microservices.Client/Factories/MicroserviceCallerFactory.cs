@@ -15,7 +15,7 @@ namespace Web.Infrastructure.Microservices.Client.Factories
                 new DefaultMethodTypeResolver(methodBuilder.Build()),
                 serviceProvider.GetRequiredService<IHttpMessageProvider>(),
                 serviceProvider.GetRequiredService<IResponseDeserializer>(),
-                new HttpClient(),
+                serviceProvider.GetRequiredService<IHttpClientFactory>(),
                 serviceProvider.GetRequiredService<IServiceLookup>().Lookup(serviceName) ??
                     serviceProvider.GetRequiredService<IServiceLookup>().Lookup(interfaceNamespace) ?? new Uri(string.Empty)
             );

@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Net.Http;
 using Web.Infrastructure.Microservices.Client.Exceptions;
 using Web.Infrastructure.Microservices.Client.Interfaces;
 using Web.Infrastructure.Microservices.Shared.Interfaces;
@@ -11,16 +12,16 @@ namespace Web.Infrastructure.Microservices.Client.Logic
         private readonly IMethodTypeResolver _methodTypeResolver;
         private readonly IHttpMessageProvider _httpMessageProvider;
         private readonly IResponseDeserializer _responseDeserializer;
-        private readonly HttpClient _httpClient;
+        private readonly IHttpClientFactory _httpClientFactory;
         private readonly Uri _baseUrl;
 
-        public HttpMicroserviceCaller(IMethodEndpointProvider methodEndpointProvider, IMethodTypeResolver methodTypeResolver, IHttpMessageProvider httpMessageProvider, IResponseDeserializer responseDeserializer, HttpClient httpClient, Uri baseUrl)
+        public HttpMicroserviceCaller(IMethodEndpointProvider methodEndpointProvider, IMethodTypeResolver methodTypeResolver, IHttpMessageProvider httpMessageProvider, IResponseDeserializer responseDeserializer, IHttpClientFactory httpClientFactory, Uri baseUrl)
         {
             _methodEndpointProvider = methodEndpointProvider;
             _methodTypeResolver = methodTypeResolver;
             _httpMessageProvider = httpMessageProvider;
             _responseDeserializer = responseDeserializer;
-            _httpClient = httpClient;
+            _httpClientFactory = httpClientFactory;
             _baseUrl = baseUrl;
         }
 
@@ -42,7 +43,8 @@ namespace Web.Infrastructure.Microservices.Client.Logic
 
             try
             {
-                var response = await _httpClient.SendAsync(message);
+                using var client = _httpClientFactory.CreateClient();
+                var response = await client.SendAsync(message);
 
                 if (response?.StatusCode != HttpStatusCode.OK)
                 {
