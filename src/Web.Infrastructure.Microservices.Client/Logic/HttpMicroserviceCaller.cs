@@ -46,9 +46,14 @@ namespace Web.Infrastructure.Microservices.Client.Logic
                 using var client = _httpClientFactory.CreateClient();
                 var response = await client.SendAsync(message);
 
-                if (response?.StatusCode != HttpStatusCode.OK)
+                if (response is null)
                 {
-                    throw new MicroserviceResponseException(response);
+                    throw new NullReferenceException(nameof(response));
+                }
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    throw new MicroserviceResponseException(await response.Content.ReadAsStringAsync(), response.StatusCode);
                 }
 
                 return _responseDeserializer.Deserialize(response?.Content?.ReadAsStringAsync().Result ?? "null", type);

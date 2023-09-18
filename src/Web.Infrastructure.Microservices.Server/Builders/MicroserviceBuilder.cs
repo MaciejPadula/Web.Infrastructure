@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Web.Infrastructure.Microservices.Server.Extensions;
-using Web.Infrastructure.Microservices.Server.Middleware;
 using Web.Infrastructure.Microservices.Shared.Extensions;
 
 namespace Web.Infrastructure.Microservices.Server.Builders;
@@ -45,12 +44,11 @@ public class MicroserviceBuilder
     {
         Services.AddMicroserviceEndpointResolver();
         Services.AddControllers();
-        Services.AddScoped<ExceptionsHandlingMiddleware>();
 
         var app = _builder.Build();
         _webAppPredicates.ForEach(webAppConfiguration => webAppConfiguration(app));
         _registeredMicroservices.ForEach(microservice => microservice(app));
-        app.UseMiddleware<ExceptionsHandlingMiddleware>();
+
         return app;
     }
 }
