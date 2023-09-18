@@ -3,7 +3,7 @@ using Web.Infrastructure.Microservices.Client.Interfaces;
 
 namespace Web.Infrastructure.Microservices.Client.Configuration.Logic
 {
-    public class ConfigurationServiceLookup : IServiceLookup
+    internal class ConfigurationServiceLookup : IServiceLookup
     {
         private readonly IConfiguration _configuration;
         private readonly string _microservicesParentPrefix;
