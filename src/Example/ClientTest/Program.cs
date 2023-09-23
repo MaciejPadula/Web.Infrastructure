@@ -4,6 +4,8 @@ using ServerTest.Contract.Interfaces;
 using Web.Infrastructure.Microservices.Client.Exceptions;
 using Web.Infrastructure.Microservices.Client.Extensions;
 using Web.Infrastructure.Microservices.Client.Configuration.Extensions;
+using Web.Infrastructure.Microservices.Client.Builders;
+using Microsoft.Extensions.Logging;
 
 var config = new ConfigurationBuilder()
     .AddInMemoryCollection(new List<KeyValuePair<string, string?>>()
@@ -13,13 +15,16 @@ var config = new ConfigurationBuilder()
     .Build();
 
 var services = new ServiceCollection();
-
+services.AddLogging(b => b.AddConsole());
 services.AddSingleton<IConfiguration>(config);
 services.AddConfigurationServiceLookup("MSRV");
 services.AddMicroserviceClient<IUserService>(builder =>
 {
     builder.AddRequestMethodType("GetUsers", HttpMethod.Get);
-});
+},
+new MicroserviceClientConfigurationBuilder()
+    .WithRequestTimeout(TimeSpan.FromSeconds(5))
+    .WithRetries(3, TimeSpan.FromMilliseconds(500)));
 
 var provider = services.BuildServiceProvider();
 
