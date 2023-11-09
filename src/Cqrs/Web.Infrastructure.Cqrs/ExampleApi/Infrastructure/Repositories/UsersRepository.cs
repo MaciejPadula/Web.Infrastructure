@@ -1,12 +1,8 @@
 ﻿using ExampleApi.Models;
 
-namespace ExampleApi.Repositories;
+namespace ExampleApi.Infrastructure.Repositories;
 
-public interface IUsersRepository : IGenericRepository<User>
-{
-}
-
-public class UsersRepository : IUsersRepository
+internal class UsersRepository : IUsersRepository
 {
     private readonly IList<User> _users = new List<User>();
 
