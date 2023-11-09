@@ -6,10 +6,8 @@ namespace Web.Infrastructure.Cqrs.Mediator
 {
     public interface IMediator
     {
-        void HandleCommand<T>(T command)
-             where T : ICommand;
-        Task HandleCommandAsync<T>(T command)
-             where T : ICommand;
+        void HandleCommand<TCommand>(TCommand command) where TCommand : ICommand;
+        Task HandleCommandAsync<TCommand>(TCommand command) where TCommand : ICommand;
 
         void HandleQuery<TQuery>(TQuery query) where TQuery : IQueryBase;
         Task HandleQueryAsync<TQuery>(TQuery query) where TQuery : IQueryBase;

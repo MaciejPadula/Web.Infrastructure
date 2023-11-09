@@ -13,15 +13,15 @@ namespace Web.Infrastructure.Cqrs.Mediator
             _handlersRepository = handlersRepository;
         }
 
-        public void HandleCommand<T>(T command) where T : ICommand
+        public void HandleCommand<TCommand>(TCommand command) where TCommand : ICommand
         {
-            var handler = _handlersRepository.GetCommandHandler<T>();
+            var handler = _handlersRepository.GetCommandHandler<TCommand>();
             handler.Handle(command);
         }
 
-        public async Task HandleCommandAsync<T>(T command) where T : ICommand
+        public async Task HandleCommandAsync<TCommand>(TCommand command) where TCommand : ICommand
         {
-            var handler = _handlersRepository.GetCommandAsyncHandler<T>();
+            var handler = _handlersRepository.GetCommandAsyncHandler<TCommand>();
             await handler.HandleAsync(command);
         }
 
