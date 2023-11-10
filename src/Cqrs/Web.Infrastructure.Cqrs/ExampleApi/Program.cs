@@ -1,6 +1,6 @@
-using ExampleApi.Features.UsersList;
-using ExampleApi.Features.UsersRegistration;
-using ExampleApi.Repositories;
+using ExampleApi.UsersList;
+using ExampleApi.UsersRegistration;
+using ExampleApi.Infrastructure;
 using Web.Infrastructure.Cqrs.Mediator.NetCoreExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.AddSingleton<IUsersRepository, UsersRepository>();
+builder.Services.AddInfrastructure();
 builder.Services.AddUsersRegistration();
 builder.Services.AddUsersList();
 builder.Services.AddMediator();

@@ -9,7 +9,7 @@ namespace Web.Infrastructure.Cqrs.Mediator
         void HandleCommand<TCommand>(TCommand command) where TCommand : ICommand;
         Task HandleCommandAsync<TCommand>(TCommand command) where TCommand : ICommand;
 
-        void HandleQuery<TQuery>(TQuery query) where TQuery : IQueryBase;
-        Task HandleQueryAsync<TQuery>(TQuery query) where TQuery : IQueryBase;
+        TQuery HandleQuery<TQuery>(TQuery query) where TQuery : IQueryBase;
+        Task<TQuery> HandleQueryAsync<TQuery>(TQuery query) where TQuery : IQueryBase;
     }
 }

@@ -1,6 +1,9 @@
-﻿using Web.Infrastructure.Cqrs.Mediator.Query;
+﻿using ExampleApi.UsersList;
+using ExampleApi.UsersList.GetUsers;
+using Microsoft.Extensions.DependencyInjection;
+using Web.Infrastructure.Cqrs.Mediator.Query;
 
-namespace ExampleApi.Features.UsersList;
+namespace ExampleApi.UsersList;
 
 public static class DependencyInjectionExtensions
 {

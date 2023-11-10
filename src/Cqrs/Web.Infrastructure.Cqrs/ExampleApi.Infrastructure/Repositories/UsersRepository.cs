@@ -1,4 +1,4 @@
-﻿using ExampleApi.Models;
+﻿using ExampleApi.Model;
 
 namespace ExampleApi.Infrastructure.Repositories;
 

@@ -1,7 +1,8 @@
-﻿using ExampleApi.Repositories;
+﻿using ExampleApi.Model;
 using Web.Infrastructure.Cqrs.Mediator.Query;
 
-namespace ExampleApi.Features.UsersRegistration;
+namespace ExampleApi.UsersRegistration.FindUser;
+
 internal class FindUserQueryHandler : IAsyncQueryHandler<FindUserQuery>
 {
     private readonly IUsersRepository _usersRepository;

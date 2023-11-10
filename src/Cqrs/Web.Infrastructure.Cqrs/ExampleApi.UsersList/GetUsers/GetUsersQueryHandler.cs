@@ -1,7 +1,7 @@
-﻿using ExampleApi.Repositories;
+﻿using ExampleApi.Model;
 using Web.Infrastructure.Cqrs.Mediator.Query;
 
-namespace ExampleApi.Features.UsersList;
+namespace ExampleApi.UsersList.GetUsers;
 
 internal class GetUsersQueryHandler : IAsyncQueryHandler<GetUsersQuery>
 {

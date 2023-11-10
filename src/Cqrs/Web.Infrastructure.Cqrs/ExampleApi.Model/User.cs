@@ -1,4 +1,4 @@
-﻿namespace ExampleApi.Models;
+﻿namespace ExampleApi.Model;
 
 public class User
 {

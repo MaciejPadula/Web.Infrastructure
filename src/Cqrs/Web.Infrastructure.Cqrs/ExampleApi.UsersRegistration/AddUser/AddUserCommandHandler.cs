@@ -1,7 +1,7 @@
-﻿using ExampleApi.Repositories;
+﻿using ExampleApi.Model;
 using Web.Infrastructure.Cqrs.Mediator.Command;
 
-namespace ExampleApi.Features.UsersRegistration;
+namespace ExampleApi.UsersRegistration.AddUser;
 
 internal class AddUserCommandHandler : IAsyncCommandHandler<AddUserCommand>
 {

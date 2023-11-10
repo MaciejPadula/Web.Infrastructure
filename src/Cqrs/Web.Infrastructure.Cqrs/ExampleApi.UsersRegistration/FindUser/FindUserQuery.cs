@@ -1,6 +1,6 @@
 ﻿using Web.Infrastructure.Cqrs.Mediator.Query;
 
-namespace ExampleApi.Features.UsersRegistration;
+namespace ExampleApi.UsersRegistration.FindUser;
 
 internal class FindUserQuery : IQuery<bool>
 {

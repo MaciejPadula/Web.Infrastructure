@@ -1,7 +1,8 @@
-﻿using ExampleApi.Models;
+﻿using ExampleApi.Model;
+using ExampleApi.UsersList.GetUsers;
 using Web.Infrastructure.Cqrs.Mediator;
 
-namespace ExampleApi.Features.UsersList;
+namespace ExampleApi.UsersList;
 
 public interface IUsersListService
 {
@@ -19,8 +20,7 @@ internal class UsersListService : IUsersListService
 
     public async Task<IEnumerable<User>> GetAllUsers()
     {
-        var query = new GetUsersQuery();
-        await _mediator.HandleQueryAsync(query);
+        var query = await _mediator.HandleQueryAsync(new GetUsersQuery());
         return query.Result;
     }
 }

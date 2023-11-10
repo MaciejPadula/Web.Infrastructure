@@ -1,6 +1,6 @@
-﻿using ExampleApi.Features.UsersList;
-using ExampleApi.Features.UsersRegistration;
-using ExampleApi.Models;
+﻿using ExampleApi.Models;
+using ExampleApi.UsersList;
+using ExampleApi.UsersRegistration;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExampleApi.Controllers;

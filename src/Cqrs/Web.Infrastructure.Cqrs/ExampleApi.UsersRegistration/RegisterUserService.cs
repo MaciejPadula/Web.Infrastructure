@@ -1,7 +1,10 @@
-﻿using ExampleApi.Models;
+﻿using ExampleApi.Model;
+using ExampleApi.UsersRegistration.AddUser;
+using ExampleApi.UsersRegistration.FindUser;
+using ExampleApi.UsersRegistration.ValidateEmail;
 using Web.Infrastructure.Cqrs.Mediator;
 
-namespace ExampleApi.Features.UsersRegistration;
+namespace ExampleApi.UsersRegistration;
 
 public interface IRegisterUserService
 {
@@ -19,22 +22,20 @@ internal class RegisterUserService : IRegisterUserService
 
     public async Task RegisterUser(string email, string name)
     {
-        var validateEmailQuery = new ValidateEmailQuery
+        var validateEmailQuery = _mediator.HandleQuery(new ValidateEmailQuery
         {
             Email = email
-        };
-        _mediator.HandleQuery(validateEmailQuery);
+        });
 
         if (!validateEmailQuery.Result)
         {
             throw new Exception("Email is invalid!");
         }
-        
-        var findUserQuery = new FindUserQuery
+
+        var findUserQuery = await _mediator.HandleQueryAsync(new FindUserQuery
         {
             Email = email
-        };
-        await _mediator.HandleQueryAsync(findUserQuery);
+        });
 
         if (findUserQuery.Result)
         {

@@ -1,4 +1,4 @@
-﻿namespace ExampleApi.Repositories;
+﻿namespace ExampleApi.Model;
 
 public interface IGenericRepository<T>
 {

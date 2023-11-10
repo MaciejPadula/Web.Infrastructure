@@ -25,16 +25,18 @@ namespace Web.Infrastructure.Cqrs.Mediator
             await handler.HandleAsync(command);
         }
 
-        public void HandleQuery<TQuery>(TQuery query) where TQuery : IQueryBase
+        public TQuery HandleQuery<TQuery>(TQuery query) where TQuery : IQueryBase
         {
             var handler = _handlersRepository.GetQueryHandler<TQuery>();
             handler.Handle(query);
+            return query;
         }
 
-        public async Task HandleQueryAsync<TQuery>(TQuery query) where TQuery : IQueryBase
+        public async Task<TQuery> HandleQueryAsync<TQuery>(TQuery query) where TQuery : IQueryBase
         {
             var handler = _handlersRepository.GetQueryAsyncHandler<TQuery>();
             await handler.HandleAsync(query);
+            return query;
         }
     }
 }

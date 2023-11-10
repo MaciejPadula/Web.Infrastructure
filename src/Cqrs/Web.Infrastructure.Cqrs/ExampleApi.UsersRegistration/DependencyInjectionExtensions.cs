@@ -1,7 +1,12 @@
-﻿using Web.Infrastructure.Cqrs.Mediator.Command;
+﻿using ExampleApi.UsersRegistration;
+using ExampleApi.UsersRegistration.AddUser;
+using ExampleApi.UsersRegistration.FindUser;
+using ExampleApi.UsersRegistration.ValidateEmail;
+using Microsoft.Extensions.DependencyInjection;
+using Web.Infrastructure.Cqrs.Mediator.Command;
 using Web.Infrastructure.Cqrs.Mediator.Query;
 
-namespace ExampleApi.Features.UsersRegistration;
+namespace ExampleApi.UsersRegistration;
 
 public static class DependencyInjectionExtensions
 {

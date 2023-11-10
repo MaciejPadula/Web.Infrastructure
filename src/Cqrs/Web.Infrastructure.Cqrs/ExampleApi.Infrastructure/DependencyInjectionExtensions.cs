@@ -1,5 +1,6 @@
 ﻿using ExampleApi.Infrastructure.Repositories;
-using ExampleApi.Models;
+using ExampleApi.Model;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ExampleApi.Infrastructure;
 
