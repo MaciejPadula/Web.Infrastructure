@@ -12,6 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ExampleApi.Infrastructure\ExampleApi.Infrastructure.csproj" />
+    <ProjectReference Include="..\ExampleApi.Model\ExampleApi.Model.csproj" />
+    <ProjectReference Include="..\ExampleApi.UsersList\ExampleApi.UsersList.csproj" />
+    <ProjectReference Include="..\ExampleApi.UsersRegistration\ExampleApi.UsersRegistration.csproj" />
     <ProjectReference Include="..\Web.Infrastructure.Cqrs.Mediator.NetCoreExtensions\Web.Infrastructure.Cqrs.Mediator.NetCoreExtensions.csproj" />
     <ProjectReference Include="..\Web.Infrastructure.Cqrs.Mediator\Web.Infrastructure.Cqrs.Mediator.csproj" />
   </ItemGroup>
